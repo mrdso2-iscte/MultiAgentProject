@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class VehicleSimulationGUI extends JFrame implements ActionListener {
+public class VehicleSimulationGUI extends JFrame implements VehicleObserver{
 
     private static final int CELL_SIZE = 50; // Modify this according to your cell size
 
@@ -115,6 +115,8 @@ public class VehicleSimulationGUI extends JFrame implements ActionListener {
         cellLabel1.setIcon(getImageForState(currentPosition));
 
     }
+
+
 
 
 //    @Override

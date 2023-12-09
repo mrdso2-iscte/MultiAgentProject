@@ -21,6 +21,17 @@ public class Vehicle implements Runnable{
 
     public static final String NOTINFECTED = "NI", INFECTED = "I", REPAIRED = "R", BROKEN = "B";
 
+    private static List<VehicleObserver> observers = new ArrayList<>();
+
+    public static void addObserver(VehicleObserver observer) {
+        observers.add(observer);
+    }
+
+    private void notifyObservers(Cell previousPosition) {
+        for (VehicleObserver observer : observers) {
+            observer.vehicleUpdated( previousPosition,this);
+        }
+    }
 
     public Vehicle(String initialState, Cell position, Double[] probabilityMetrics, GridMap gridMap, int id) {
         this.state = initialState;
