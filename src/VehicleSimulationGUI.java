@@ -27,7 +27,9 @@ public class VehicleSimulationGUI extends JFrame implements ActionListener {
         this.GRIDHEIGHT = gridMap.getYLength();
         loadImages(); // Load images for different vehicle states
         initializeGUI();
-        simulate();
+        for (Vehicle vehicle : gridMap.getVehicleList()) {
+            vehicle.addObserver(this);
+        }
     }
 
     private void loadImages() {
@@ -83,6 +85,7 @@ public class VehicleSimulationGUI extends JFrame implements ActionListener {
                     image = repairedImage;
                     break;
                 case Vehicle.BROKEN:
+                    System.out.println("estou broken " + vehicle.getId());
                     image = brokenImage;
                     break;
                 default:
@@ -97,39 +100,31 @@ public class VehicleSimulationGUI extends JFrame implements ActionListener {
         return null;
     }
 
-    private void simulate() {
-        Timer timer = new Timer(1000, this); // Change delay as needed
-        timer.start();
+
+
+    private void updateGrid(Cell previousPosition,Vehicle vehicle) {
+
+
+
+        JLabel cellLabel = (JLabel) gridPanel.getComponent(previousPosition.getX() * GRIDWIDTH + previousPosition.getY());
+
+        cellLabel.setIcon(null);
+
+        Cell currentPosition = vehicle.getCurrentPosition();
+        JLabel cellLabel1 = (JLabel) gridPanel.getComponent(currentPosition.getX() * GRIDWIDTH + currentPosition.getY());
+        cellLabel1.setIcon(getImageForState(currentPosition));
+
     }
+
+
+//    @Override
+//    public void actionPerformed(ActionEvent e) {
+//
+//        updateGrid();
+//    }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        for (int x = 0; x < GRIDWIDTH; x++) {
-            for (int y = 0; y < GRIDHEIGHT; y++) {
-                Cell cell = gridMap.getCell(x, y);
-                if (cell.isOccupied()) {
-                    Vehicle vehicle = (Vehicle) cell.getObject();
-                    vehicle.move();
-                }
-            }
-        }
-        updateGrid();
+    public void vehicleUpdated(Cell previousPosition,Vehicle vehicle) {
+        updateGrid( previousPosition, vehicle);
     }
-
-    private void updateGrid() {
-        for (int x = 0; x < GRIDWIDTH; x++) {
-            for (int y = 0; y < GRIDHEIGHT; y++) {
-                Cell cell = gridMap.getCell(x, y);
-                JLabel cellLabel = (JLabel) gridPanel.getComponent(x * GRIDWIDTH + y);
-
-                // Update JLabel icons based on vehicle state
-                if (cell.isOccupied()) {
-                    ImageIcon icon = getImageForState(cell);
-                    cellLabel.setIcon(icon);
-                }
-            }
-        }
-    }
-
-
 }

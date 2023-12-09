@@ -6,11 +6,16 @@ import java.util.Random;
 public class Main {
     public static void main(String[] args) {
 
-        Double porbabilityMetrics[] = {0.1, 0.1, 0.1};
+        Double[] probabilities = {0.3, 0.2, 0.7}; // Adjust with actual probabilities
 
-        GridMap gridMap = new GridMap(15, 15,porbabilityMetrics);
 
-        SwingUtilities.invokeLater(() -> new VehicleSimulationGUI(gridMap));
+
+        GridMap map = new GridMap(10, 10, probabilities);
+
+        SwingUtilities.invokeLater(() -> {
+            VehicleSimulationGUI newGUI = new VehicleSimulationGUI(map);
+        });
+
 
 
 

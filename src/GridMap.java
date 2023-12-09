@@ -1,19 +1,28 @@
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class GridMap {
 
     private static Cell [][] grid;
-    private final int NUM_NORMAL_VEHICLES = 1;
-    private final int NUM_INFECTED_VEHICLES = 0;
+    private final int NUM_NORMAL_VEHICLES = 10;
+    private final int NUM_INFECTED_VEHICLES = 5;
 
     private final Double[] probabilityMetrics;
 
+    private List<Vehicle> vehicleList= new ArrayList<>();
+
+
     public GridMap(int width, int height, Double[] probabilityMetrics) {
         this.probabilityMetrics = probabilityMetrics;
+
+
         initializeGridAndVehicles(width, height);
 
+
     }
+
 
     public void initializeGridAndVehicles(int width, int height) {
         this.grid = new Cell[width][height];
@@ -23,30 +32,26 @@ public class GridMap {
             }
         }
         for (int i = 0; i < NUM_NORMAL_VEHICLES; i++) {
-            Vehicle vehicle= new Vehicle(Vehicle.NOTINFECTED, chooseRandomCell(), probabilityMetrics,this);
-            startVehicleThread(vehicle);
+            Vehicle vehicle= new Vehicle(Vehicle.NOTINFECTED,chooseRandomCell(), probabilityMetrics,this,i);
+            vehicleList.add(vehicle);
+
         }
         for (int i = 0; i < NUM_INFECTED_VEHICLES; i++) {
-            Vehicle vehicle= new Vehicle(Vehicle.INFECTED, chooseRandomCell(), probabilityMetrics,this);
-            startVehicleThread(vehicle);
+            Vehicle vehicle = new Vehicle(Vehicle.INFECTED, chooseRandomCell(), probabilityMetrics, this,i+NUM_NORMAL_VEHICLES);
+
+            vehicleList.add(vehicle);
+        }
+        startVehiclesThreads();
+    }
+    public void startVehiclesThreads() {
+
+        for (Vehicle vehicle : vehicleList) {
+            Thread thread = new Thread(vehicle);
+            thread.start();
+
         }
     }
 
-    private void startVehicleThread(Vehicle vehicle) {
-            Thread vehicleThread = new Thread(() -> {
-                while (true) {
-                    // Your vehicle movement logic goes here
-                    vehicle.move();
-                    try {
-                        // Adjust the sleep duration based on your simulation speed
-                        Thread.sleep(2000); // Sleep for 1 second
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            vehicleThread.start();
-    }
 
     public int getXLength(){
         return this.grid.length;
@@ -91,8 +96,12 @@ public class GridMap {
         if(isCellOccupied(x, y)) {
             chooseRandomCell();
         }
+
         return getCell(x, y);
     }
 
 
+    public List<Vehicle> getVehicleList() {
+        return vehicleList;
+    }
 }
