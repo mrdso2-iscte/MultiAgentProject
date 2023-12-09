@@ -12,15 +12,17 @@ public class GridMap {
     private final Double[] probabilityMetrics;
 
     private List<Vehicle> vehicleList= new ArrayList<>();
+    private List<CentralAttractors> centralAttractorsList = new ArrayList<>();
 
-    private int notInfectedCount, infectedCount, repairedCount, brokenCount;
+    public CounterUpdater counterUpdater;
 
 
     public GridMap(int width, int height, Double[] probabilityMetrics) {
         this.probabilityMetrics = probabilityMetrics;
-
+        this.counterUpdater = new CounterUpdater();
 
         initializeGridAndVehicles(width, height);
+
 
 
     }
@@ -33,17 +35,24 @@ public class GridMap {
                 grid[i][j] = new Cell(i, j);
             }
         }
+
+        for(int i = 0; i < NUM_NORMAL_VEHICLES; i++) {
+            CentralAttractors cA= new CentralAttractors("hospital",chooseRandomCell());
+            centralAttractorsList.add(cA);
+
+
+        }
         for (int i = 0; i < NUM_NORMAL_VEHICLES; i++) {
             Vehicle vehicle= new Vehicle(Vehicle.NOTINFECTED,chooseRandomCell(), probabilityMetrics,this,i);
             vehicleList.add(vehicle);
-            this.notInfectedCount++;
+            counterUpdater.updateCounter(Vehicle.NOTINFECTED);
 
         }
         for (int i = 0; i < NUM_INFECTED_VEHICLES; i++) {
             Vehicle vehicle = new Vehicle(Vehicle.INFECTED, chooseRandomCell(), probabilityMetrics, this,i+NUM_NORMAL_VEHICLES);
 
             vehicleList.add(vehicle);
-            this.infectedCount++;
+            counterUpdater.updateCounter(Vehicle.INFECTED);
         }
         startVehiclesThreads();
     }
@@ -110,50 +119,12 @@ public class GridMap {
     }
 
 
-    public void updateCounter(String previousstate, String newState){
-        switch (previousstate){
-            case Vehicle.NOTINFECTED:
-                this.notInfectedCount--;
-                break;
-            case Vehicle.INFECTED:
-                this.infectedCount--;
-                break;
-            case Vehicle.REPAIRED:
-                this.repairedCount--;
-                break;
-            case Vehicle.BROKEN:
-                this.brokenCount--;
-                break;
-        }
-        switch (newState){
-            case Vehicle.NOTINFECTED:
-                this.notInfectedCount++;
-                break;
-            case Vehicle.INFECTED:
-                this.infectedCount++;
-                break;
-            case Vehicle.REPAIRED:
-                this.repairedCount++;
-                break;
-            case Vehicle.BROKEN:
-                this.brokenCount++;
-                break;
-        }
+
+    public CounterUpdater getCounterUpdater() {
+        return counterUpdater;
     }
 
-    public int getNotInfectedCount() {
-        return notInfectedCount;
-    }
-
-    public int getInfectedCount() {
-        return infectedCount;
-    }
-
-    public int getRepairedCount() {
-        return repairedCount;
-    }
-
-    public int getBrokenCount() {
-        return brokenCount;
+    public List<CentralAttractors> getCentralAttractorsList() {
+        return centralAttractorsList;
     }
 }

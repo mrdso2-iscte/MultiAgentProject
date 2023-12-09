@@ -1,10 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import javax.swing.*;
-import javax.swing.*;
 
 public class Vehicle implements Runnable{
     private final GridMap gridMap;
@@ -14,9 +10,7 @@ public class Vehicle implements Runnable{
 
     private int id;
 
-
-
-    public static double pINF, pREP, pBREAK;
+    public static double pINF, pREP, pBREAK, pATR;
     public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
 
     public static final String NOTINFECTED = "NI", INFECTED = "I", REPAIRED = "R", BROKEN = "B";
@@ -40,6 +34,7 @@ public class Vehicle implements Runnable{
         pINF = probabilityMetrics[0];
         pREP = probabilityMetrics[1];
         pBREAK = probabilityMetrics[2];
+        pATR = probabilityMetrics[3];
         this.gridMap = gridMap;
         this.id = id;
 
@@ -103,7 +98,8 @@ public class Vehicle implements Runnable{
             for (Vehicle neighbour : neighbours) {
                 if (neighbour.getState().equals(INFECTED)) {
                     this.setState(INFECTED);
-                    gridMap.updateCounter(previousState, this.state);
+                    CounterUpdater counterUpdater = gridMap.counterUpdater;
+                    counterUpdater.updateCounter(previousState, this.state);
                     break;
                 }
             }
@@ -114,17 +110,25 @@ public class Vehicle implements Runnable{
     public void getRepairedOrBroken() {
         double random = new Random().nextDouble();
         String previousState = this.state;
+        CounterUpdater counterUpdater = gridMap.counterUpdater;
         if (random < pREP){
             this.setState(REPAIRED);
-            gridMap.updateCounter(previousState, this.state);
+
+            counterUpdater.updateCounter(previousState, this.state);
         }
         else if (random <= pREP + pBREAK) {
 
             this.setState(BROKEN);
-            gridMap.updateCounter(previousState, this.state);
+            counterUpdater.updateCounter(previousState, this.state);
             notifyObservers(currentPosition);
         }
 
+    }
+    public void movedTowardAttractor(){
+        double random = new Random().nextDouble();
+        if(random > pATR){
+
+        }
     }
 
 
@@ -135,6 +139,7 @@ public class Vehicle implements Runnable{
 
 
             if (!state.equals(BROKEN)) {
+
                 takeNextStep();
                 switch (this.state) {
                     case NOTINFECTED, REPAIRED -> getInfected();
@@ -145,6 +150,7 @@ public class Vehicle implements Runnable{
 
 
     }
+
 
     @Override
     public void run() {

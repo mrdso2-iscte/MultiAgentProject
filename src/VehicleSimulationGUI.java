@@ -21,15 +21,25 @@ public class VehicleSimulationGUI extends JFrame implements VehicleObserver{
     private BufferedImage repairedImage;    // Image for REPAIRED state
     private BufferedImage brokenImage;      // Image for BROKEN state
 
+    private BufferedImage cantralAttractorsImage;      // Image for BROKEN state
+    private JPanel counterPanel; // Panel to display counter information
+    private JLabel notInfectedCountLabel;
+    private JLabel infectedCountLabel;
+    private JLabel repairedCountLabel;
+    private JLabel brokenCountLabel;
+
     public VehicleSimulationGUI(GridMap gridMap) {
         this.gridMap = gridMap;
         this.GRIDWIDTH = gridMap.getXLength();
         this.GRIDHEIGHT = gridMap.getYLength();
         loadImages(); // Load images for different vehicle states
         initializeGUI();
+        initialCentralAttractors();
+
         for (Vehicle vehicle : gridMap.getVehicleList()) {
             vehicle.addObserver(this);
         }
+        initializeCounterPanel();
     }
 
     private void loadImages() {
@@ -39,6 +49,7 @@ public class VehicleSimulationGUI extends JFrame implements VehicleObserver{
             infectedImage = ImageIO.read(new File("./src/images/Infected.jpeg"));
             repairedImage = ImageIO.read(new File("./src/images/Car.jpeg"));
             brokenImage = ImageIO.read(new File("./src/images/BrokenCar.jpeg"));
+            cantralAttractorsImage = ImageIO.read(new File("./src/images/eiffel-tower.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,11 +78,21 @@ public class VehicleSimulationGUI extends JFrame implements VehicleObserver{
         add(gridPanel, BorderLayout.CENTER);
         pack();
         setLocationRelativeTo(null);
+        setSize(800, 600);
         setVisible(true);
     }
 
+    private void initialCentralAttractors() {
+        for (CentralAttractors cA : gridMap.getCentralAttractorsList()) {
+            JLabel cellLabel = (JLabel) gridPanel.getComponent(cA.getPosition().getX() * GRIDWIDTH + cA.getPosition().getY());
+            Image newimg = cantralAttractorsImage.getScaledInstance(40, 40, java.awt.Image.SCALE_REPLICATE);
+            cellLabel.setIcon(new ImageIcon(newimg));
+
+        }
+    }
+
     private ImageIcon getImageForState(Cell cell) {
-        if (cell.isOccupied()) {
+        if (cell.isOccupied() && cell.getObject() instanceof Vehicle) {
             Vehicle vehicle = (Vehicle) cell.getObject();
             BufferedImage image;
             switch (vehicle.getState()) {
@@ -115,8 +136,37 @@ public class VehicleSimulationGUI extends JFrame implements VehicleObserver{
         cellLabel1.setIcon(getImageForState(currentPosition));
 
 
-        System.out.println("Grid updated: noInfect "+ gridMap.getNotInfectedCount() + " infect " + gridMap.getInfectedCount() + " repaired " + gridMap.getRepairedCount() + " broken " + gridMap.getBrokenCount()  );
+        updateCounterLabels();
+        System.out.println(gridMap.counterUpdater.toString());
 
+    }
+    private void initializeCounterPanel() {
+        counterPanel = new JPanel();
+        counterPanel.setLayout(new GridLayout(4, 2)); // Adjust layout according to your design
+
+        // Create labels for counter information
+        notInfectedCountLabel = new JLabel("Not Infected Count: ");
+        infectedCountLabel = new JLabel("Infected Count: ");
+        repairedCountLabel = new JLabel("Repaired Count: ");
+        brokenCountLabel = new JLabel("Broken Count: ");
+
+        // Add labels to the counter panel
+        counterPanel.add(notInfectedCountLabel);
+        counterPanel.add(new JLabel());
+        counterPanel.add(infectedCountLabel);
+        counterPanel.add(new JLabel());
+        counterPanel.add(repairedCountLabel);
+        counterPanel.add(new JLabel());
+        counterPanel.add(brokenCountLabel);
+        counterPanel.add(new JLabel());
+
+        add(counterPanel, BorderLayout.EAST); // Add the counter panel to the right side
+    }
+    private void updateCounterLabels() {
+        notInfectedCountLabel.setText("Not Infected Count: " + gridMap.counterUpdater.getNotInfectedCount());
+        infectedCountLabel.setText("Infected Count: " + gridMap.counterUpdater.getInfectedCount());
+        repairedCountLabel.setText("Repaired Count: " + gridMap.counterUpdater.getRepairedCount());
+        brokenCountLabel.setText("Broken Count: " + gridMap.counterUpdater.getBrokenCount());
     }
 
 

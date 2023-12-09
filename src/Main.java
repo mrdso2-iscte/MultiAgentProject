@@ -6,7 +6,7 @@ import java.util.Random;
 public class Main {
     public static void main(String[] args) {
 
-        Double[] probabilities = {0.4, 0.2, 0.2}; // Adjust with actual probabilities
+        Double[] probabilities = {0.4, 0.2, 0.2,0.3}; // Adjust with actual probabilities
 
 
 
