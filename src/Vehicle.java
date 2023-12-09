@@ -10,7 +10,7 @@ public class Vehicle implements Runnable{
     private final GridMap gridMap;
     private String state;
     private  Cell currentPosition;
-    private static Lock moveLock = new ReentrantLock();
+
 
     private int id;
 
@@ -61,6 +61,7 @@ public class Vehicle implements Runnable{
 
 
     public void takeNextStep( ) {
+
         int newX = currentPosition.getX(), newY = currentPosition.getY();
 
         Random rand = new Random();
@@ -95,12 +96,14 @@ public class Vehicle implements Runnable{
 
     public void getInfected( ){
         Random random = new Random();
+
         if (random.nextDouble() > pINF) {
             ArrayList<Vehicle> neighbours = gridMap.getNeighbouringVehicles(this);
-
+            String previousState = this.state;
             for (Vehicle neighbour : neighbours) {
                 if (neighbour.getState().equals(INFECTED)) {
                     this.setState(INFECTED);
+                    gridMap.updateCounter(previousState, this.state);
                     break;
                 }
             }
@@ -110,36 +113,35 @@ public class Vehicle implements Runnable{
 
     public void getRepairedOrBroken() {
         double random = new Random().nextDouble();
+        String previousState = this.state;
         if (random < pREP){
             this.setState(REPAIRED);
+            gridMap.updateCounter(previousState, this.state);
         }
         else if (random <= pREP + pBREAK) {
+
             this.setState(BROKEN);
+            gridMap.updateCounter(previousState, this.state);
+            notifyObservers(currentPosition);
         }
 
     }
 
 
 
-    public void move() {
+    public synchronized void move() {
 
-        moveLock.lock();
-        try {
+
+
 
             if (!state.equals(BROKEN)) {
-
                 takeNextStep();
                 switch (this.state) {
                     case NOTINFECTED, REPAIRED -> getInfected();
                     case INFECTED -> getRepairedOrBroken();
                 }
-
-
             }
-        } finally {
-            moveLock.unlock();
 
-        }
 
 
     }
@@ -150,9 +152,7 @@ public class Vehicle implements Runnable{
 
             move();
             try {
-
                 Thread.sleep(2000); // Sleep for 1 second
-
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

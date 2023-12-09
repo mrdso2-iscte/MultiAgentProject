@@ -85,7 +85,7 @@ public class VehicleSimulationGUI extends JFrame implements VehicleObserver{
                     image = repairedImage;
                     break;
                 case Vehicle.BROKEN:
-                    System.out.println("estou broken " + vehicle.getId());
+
                     image = brokenImage;
                     break;
                 default:
@@ -114,16 +114,14 @@ public class VehicleSimulationGUI extends JFrame implements VehicleObserver{
         JLabel cellLabel1 = (JLabel) gridPanel.getComponent(currentPosition.getX() * GRIDWIDTH + currentPosition.getY());
         cellLabel1.setIcon(getImageForState(currentPosition));
 
+
+        System.out.println("Grid updated: noInfect "+ gridMap.getNotInfectedCount() + " infect " + gridMap.getInfectedCount() + " repaired " + gridMap.getRepairedCount() + " broken " + gridMap.getBrokenCount()  );
+
     }
 
 
 
 
-//    @Override
-//    public void actionPerformed(ActionEvent e) {
-//
-//        updateGrid();
-//    }
 
     @Override
     public void vehicleUpdated(Cell previousPosition,Vehicle vehicle) {

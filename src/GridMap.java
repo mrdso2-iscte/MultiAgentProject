@@ -5,13 +5,15 @@ import java.util.Random;
 
 public class GridMap {
 
-    private static Cell [][] grid;
+    private  Cell [][] grid;
     private final int NUM_NORMAL_VEHICLES = 10;
     private final int NUM_INFECTED_VEHICLES = 5;
 
     private final Double[] probabilityMetrics;
 
     private List<Vehicle> vehicleList= new ArrayList<>();
+
+    private int notInfectedCount, infectedCount, repairedCount, brokenCount;
 
 
     public GridMap(int width, int height, Double[] probabilityMetrics) {
@@ -34,12 +36,14 @@ public class GridMap {
         for (int i = 0; i < NUM_NORMAL_VEHICLES; i++) {
             Vehicle vehicle= new Vehicle(Vehicle.NOTINFECTED,chooseRandomCell(), probabilityMetrics,this,i);
             vehicleList.add(vehicle);
+            this.notInfectedCount++;
 
         }
         for (int i = 0; i < NUM_INFECTED_VEHICLES; i++) {
             Vehicle vehicle = new Vehicle(Vehicle.INFECTED, chooseRandomCell(), probabilityMetrics, this,i+NUM_NORMAL_VEHICLES);
 
             vehicleList.add(vehicle);
+            this.infectedCount++;
         }
         startVehiclesThreads();
     }
@@ -68,7 +72,7 @@ public class GridMap {
         return grid[x][y].isOccupied();
     }
 
-    public static ArrayList<Vehicle> getNeighbouringVehicles(Vehicle vehicle) {
+    public  ArrayList<Vehicle> getNeighbouringVehicles(Vehicle vehicle) {
         Cell centerCell = vehicle.getCurrentPosition();
         int x = centerCell.getX();
         int y = centerCell.getY();
@@ -84,7 +88,7 @@ public class GridMap {
         return neighbouringVehicles;
     }
 
-    private static boolean isValidCell(int x, int y) {
+    private  boolean isValidCell(int x, int y) {
         return x >= 0 && x < grid.length && y >= 0 && y < grid[0].length;
     }
 
@@ -103,5 +107,53 @@ public class GridMap {
 
     public List<Vehicle> getVehicleList() {
         return vehicleList;
+    }
+
+
+    public void updateCounter(String previousstate, String newState){
+        switch (previousstate){
+            case Vehicle.NOTINFECTED:
+                this.notInfectedCount--;
+                break;
+            case Vehicle.INFECTED:
+                this.infectedCount--;
+                break;
+            case Vehicle.REPAIRED:
+                this.repairedCount--;
+                break;
+            case Vehicle.BROKEN:
+                this.brokenCount--;
+                break;
+        }
+        switch (newState){
+            case Vehicle.NOTINFECTED:
+                this.notInfectedCount++;
+                break;
+            case Vehicle.INFECTED:
+                this.infectedCount++;
+                break;
+            case Vehicle.REPAIRED:
+                this.repairedCount++;
+                break;
+            case Vehicle.BROKEN:
+                this.brokenCount++;
+                break;
+        }
+    }
+
+    public int getNotInfectedCount() {
+        return notInfectedCount;
+    }
+
+    public int getInfectedCount() {
+        return infectedCount;
+    }
+
+    public int getRepairedCount() {
+        return repairedCount;
+    }
+
+    public int getBrokenCount() {
+        return brokenCount;
     }
 }
