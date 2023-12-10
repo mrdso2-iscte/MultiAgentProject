@@ -3,15 +3,15 @@ import java.util.List;
 public class CentralAttractors {
 
     private String attractorType;
-    private Cell positon;
+    private Cell position;
     public CentralAttractors(String attractorType, Cell position){
         this.attractorType = attractorType;
-        this.positon = position;
+        this.position = position;
         position.setObject(this);
     }
 
     public Cell getPosition() {
-        return positon;
+        return position;
     }
 
     public String getAttractorType() {

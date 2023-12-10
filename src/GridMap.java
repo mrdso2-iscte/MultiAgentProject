@@ -116,14 +116,12 @@ public class GridMap {
     }
 
     public Cell chooseRandomCell() {
-
         Random rand = new Random();
         int x = rand.nextInt(getXLength());
         int y = rand.nextInt(getYLength());
         if(isCellOccupied(x, y)) {
             chooseRandomCell();
         }
-
         return getCell(x, y);
     }
 

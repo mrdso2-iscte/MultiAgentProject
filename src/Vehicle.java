@@ -2,6 +2,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
+/* O QUE FALTA:
+* - quando ficam empacotados a esoera pra ir para um attractor, escolher uma posicao atoa para sair dali
+* - em vez de irem pra cima dos monumentos, ficam so ao lado
+* -
+* */
 public class Vehicle implements Runnable{
     private final GridMap gridMap;
     private String state;
@@ -32,14 +38,14 @@ public class Vehicle implements Runnable{
 
     public Vehicle(String initialState, Cell position, Double[] probabilityMetrics, GridMap gridMap, int id) {
         this.state = initialState;
+        this.gridMap = gridMap;
+        this.id = id;
         currentPosition = position;
         currentPosition.setObject(this);
         pINF = probabilityMetrics[0];
         pREP = probabilityMetrics[1];
         pBREAK = probabilityMetrics[2];
         pATR = probabilityMetrics[3];
-        this.gridMap = gridMap;
-        this.id = id;
 
     }
 
@@ -145,8 +151,7 @@ public class Vehicle implements Runnable{
     //a vehicle gets infected depends on probability pINF
     public void getInfected( ){
         Random random = new Random();
-
-        if (random.nextDouble() > pINF) {
+        if (random.nextDouble() < pINF) {
             ArrayList<Vehicle> neighbours = gridMap.getNeighbouringVehicles(this);
             String previousState = this.state;
             for (Vehicle neighbour : neighbours) {
@@ -157,7 +162,6 @@ public class Vehicle implements Runnable{
                     break;
                 }
             }
-
         }
     }
 
@@ -168,7 +172,6 @@ public class Vehicle implements Runnable{
         CounterUpdater counterUpdater = gridMap.counterUpdater;
         if (random <=pREP){
             this.setState(REPAIRED);
-
             counterUpdater.updateCounter(previousState, this.state);
         }
         else if (random<= pREP + pBREAK) {
@@ -176,7 +179,6 @@ public class Vehicle implements Runnable{
             counterUpdater.updateCounter(previousState, this.state);
             notifyObservers(currentPosition);
         }
-
     }
 
 
