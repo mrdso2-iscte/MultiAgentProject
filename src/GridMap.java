@@ -1,4 +1,5 @@
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,6 +17,9 @@ public class GridMap {
     private List<Vehicle> vehicleList= new ArrayList<>();
     private List<CentralAttractors> centralAttractorsList = new ArrayList<>();
 
+
+    private VehicleSimulationGUI gui;
+
     public CounterUpdater counterUpdater;
 
 
@@ -26,9 +30,7 @@ public class GridMap {
         this.NUM_CENTRAL_ATTRACTORS= numberOfObjects[2];
         this.counterUpdater = new CounterUpdater();
 
-        initializeGridAndVehicles(width, height);
-
-
+        initializeGridVehiclesAndAttractors(width, height);
 
     }
 
@@ -51,7 +53,7 @@ public class GridMap {
     }
 
 
-    public void initializeGridAndVehicles(int width, int height) {
+    public void initializeGridVehiclesAndAttractors(int width, int height) {
         this.grid = new Cell[width][height];
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++) {
@@ -77,6 +79,7 @@ public class GridMap {
             vehicleList.add(vehicle);
             counterUpdater.updateCounter(Vehicle.INFECTED);
         }
+        initializeGUI();
         startVehiclesThreads();
     }
     public void startVehiclesThreads() {
@@ -86,6 +89,18 @@ public class GridMap {
             thread.start();
 
         }
+    }
+
+    public void initializeGUI(){
+        this.gui = new VehicleSimulationGUI(this);
+        SwingUtilities.invokeLater(() -> {
+          gui.setVisible(true);
+        });
+
+
+    }
+    public void updateGui(Cell previousPosition,Vehicle vehicle) {
+        gui.updateGrid(previousPosition,vehicle);
     }
 
 

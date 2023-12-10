@@ -22,11 +22,8 @@ public class Main {
         int[] numberOfObjects = {NUM_NORMAL_VEHICLES, NUM_INFECTED_VEHICLES, NUM_CENTRAL_ATTRACTORS};
 
 
-        GridMap map = new GridMap(gridSizeX,gridSizeY, probabilities, numberOfObjects);
+        new GridMap(gridSizeX,gridSizeY, probabilities, numberOfObjects);
 
-        SwingUtilities.invokeLater(() -> {
-            VehicleSimulationGUI newGUI = new VehicleSimulationGUI(map);
-        });
 
 
 

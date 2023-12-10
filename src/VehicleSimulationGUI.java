@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class VehicleSimulationGUI extends JFrame implements VehicleObserver{
+public class VehicleSimulationGUI extends JFrame {
 
     private static final int CELL_SIZE = 50; // Modify this according to your cell size
 
@@ -36,9 +36,7 @@ public class VehicleSimulationGUI extends JFrame implements VehicleObserver{
         initializeGUI();
         initialCentralAttractors();
 
-        for (Vehicle vehicle : gridMap.getVehicleList()) {
-            vehicle.addObserver(this);
-        }
+
         initializeCounterPanel();
     }
 
@@ -123,7 +121,7 @@ public class VehicleSimulationGUI extends JFrame implements VehicleObserver{
 
 
 
-    private void updateGrid(Cell previousPosition,Vehicle vehicle) {
+    public void updateGrid(Cell previousPosition,Vehicle vehicle) {
 
         JLabel previousCellLabel = (JLabel) gridPanel.getComponent(previousPosition.getX() * GRIDWIDTH + previousPosition.getY());
         previousCellLabel.setIcon(null);
@@ -173,8 +171,5 @@ public class VehicleSimulationGUI extends JFrame implements VehicleObserver{
 
 
 
-    @Override
-    public void vehicleUpdated(Cell previousPosition,Vehicle vehicle) {
-        updateGrid( previousPosition, vehicle);
-    }
+
 }

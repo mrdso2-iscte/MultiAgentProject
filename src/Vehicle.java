@@ -21,20 +21,12 @@ public class Vehicle implements Runnable{
 
     public static final String NOTINFECTED = "NI", INFECTED = "I", REPAIRED = "R", BROKEN = "B";
 
-    private static List<VehicleObserver> observers = new ArrayList<>();
+
 
     private  CentralAttractors goingToAttractor = null;
 
-    public static void addObserver(VehicleObserver observer) {
-        observers.add(observer);
-    }
 
-    private void notifyObservers(Cell previousPosition) {
-        for (VehicleObserver observer : observers) {
-            observer.vehicleUpdated( previousPosition,this);
-        }
 
-    }
 
     public Vehicle(String initialState, Cell position, Double[] probabilityMetrics, GridMap gridMap, int id) {
         this.state = initialState;
@@ -98,7 +90,7 @@ public class Vehicle implements Runnable{
     public  int[] getClosestPosition(){
         int x= currentPosition.getX();
         int y= currentPosition.getY();
-        Cell [] listNeighbouringCells = {new Cell(x-1,y), new Cell(x+1,y), new Cell(x,y-1), new Cell(x,y+1)}; //cima, baixo, left, right
+        Cell [] listNeighbouringCells = {new Cell(x-1,y), new Cell(x+1,y), new Cell(x,y-1), new Cell(x,y+1)};
         double minDistance=getDistanceToAttraction( listNeighbouringCells[0]);
          Cell nextPosition = listNeighbouringCells[0];
 
@@ -143,7 +135,6 @@ public class Vehicle implements Runnable{
             newY = newPosition[1];
         }
         if (newX >= 0 && newX < this.gridMap.getXLength() && newY >= 0 && newY < this.gridMap.getYLength() && !this.gridMap.isCellOccupied(newX, newY)){
-            System.out.println(" Vou-me mover para " + newX + newY);
             changePosition(this.gridMap.getCell(newX, newY));
         }
     }
@@ -177,7 +168,7 @@ public class Vehicle implements Runnable{
         else if (random<= pREP + pBREAK) {
             this.setState(BROKEN);
             counterUpdater.updateCounter(previousState, this.state);
-            notifyObservers(currentPosition);
+            gridMap.updateGui(currentPosition,this);
         }
     }
 
@@ -210,12 +201,15 @@ public class Vehicle implements Runnable{
             }
     }
 
+
+
     @Override
     public void run() {
         while (!this.state.equals(BROKEN)) {
             Cell previousPosition = currentPosition;
             move();
-            notifyObservers(previousPosition);
+            gridMap.updateGui(previousPosition,this);
+            //notifyObservers(previousPosition);
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
