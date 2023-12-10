@@ -168,8 +168,9 @@ public class Vehicle implements Runnable{
         else if (random<= pREP + pBREAK) {
             this.setState(BROKEN);
             counterUpdater.updateCounter(previousState, this.state);
-            gridMap.updateGui(currentPosition,this);
+
         }
+        gridMap.updateGui(currentPosition,this);
     }
 
 

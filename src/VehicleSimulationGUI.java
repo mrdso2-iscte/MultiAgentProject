@@ -45,7 +45,7 @@ public class VehicleSimulationGUI extends JFrame {
 
             notInfectedImage = ImageIO.read(new File("./src/images/Car.jpeg"));
             infectedImage = ImageIO.read(new File("./src/images/Infected.jpeg"));
-            repairedImage = ImageIO.read(new File("./src/images/Car.jpeg"));
+            repairedImage = ImageIO.read(new File("./src/images/RepairedCar.png"));
             brokenImage = ImageIO.read(new File("./src/images/BrokenCar.jpeg"));
             cantralAttractorsImage = ImageIO.read(new File("./src/images/eiffel-tower.png"));
         } catch (IOException e) {
@@ -161,10 +161,10 @@ public class VehicleSimulationGUI extends JFrame {
 
     }
     private void updateCounterLabels() {
-        notInfectedCountLabel.setText("Not Infected Count: " + gridMap.counterUpdater.getNotInfectedCount());
-        infectedCountLabel.setText("Infected Count: " + gridMap.counterUpdater.getInfectedCount());
-        repairedCountLabel.setText("Repaired Count: " + gridMap.counterUpdater.getRepairedCount());
-        brokenCountLabel.setText("Broken Count: " + gridMap.counterUpdater.getBrokenCount());
+        notInfectedCountLabel.setText("Not Infected (Black car): " + gridMap.counterUpdater.getNotInfectedCount());
+        infectedCountLabel.setText("Infected (Red car): " + gridMap.counterUpdater.getInfectedCount());
+        repairedCountLabel.setText("Repaired (Blue car): " + gridMap.counterUpdater.getRepairedCount());
+        brokenCountLabel.setText("Broken(Grey car): " + gridMap.counterUpdater.getBrokenCount());
     }
 
 
