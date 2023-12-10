@@ -104,8 +104,6 @@ public class GridMap {
     }
 
 
-
-
     public boolean isCellOccupied(int x, int y) {
         return grid[x][y].isOccupied();
     }
