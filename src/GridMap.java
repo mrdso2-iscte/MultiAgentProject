@@ -6,8 +6,10 @@ import java.util.Random;
 public class GridMap {
 
     private  Cell [][] grid;
-    private final int NUM_NORMAL_VEHICLES = 10;
-    private final int NUM_INFECTED_VEHICLES = 5;
+    private final int NUM_NORMAL_VEHICLES ;
+    private final int NUM_INFECTED_VEHICLES ;
+
+    private final int NUM_CENTRAL_ATTRACTORS;
 
     private final Double[] probabilityMetrics;
 
@@ -17,14 +19,35 @@ public class GridMap {
     public CounterUpdater counterUpdater;
 
 
-    public GridMap(int width, int height, Double[] probabilityMetrics) {
+    public GridMap(int width, int height, Double[] probabilityMetrics, int[] numberOfObjects) {
         this.probabilityMetrics = probabilityMetrics;
+        this.NUM_NORMAL_VEHICLES= numberOfObjects[0];
+        this.NUM_INFECTED_VEHICLES= numberOfObjects[1];
+        this.NUM_CENTRAL_ATTRACTORS= numberOfObjects[2];
         this.counterUpdater = new CounterUpdater();
 
         initializeGridAndVehicles(width, height);
 
 
 
+    }
+
+
+    public int getXLength(){
+        return this.grid.length;
+    }
+    public int getYLength(){
+        return this.grid[0].length;
+    }
+    public Cell getCell(int x,int y ) {
+        return grid[x][y];
+    }
+    public List<Vehicle> getVehicleList() {
+        return vehicleList;
+    }
+
+    public List<CentralAttractors> getCentralAttractorsList() {
+        return centralAttractorsList;
     }
 
 
@@ -36,8 +59,8 @@ public class GridMap {
             }
         }
 
-        for(int i = 0; i < NUM_NORMAL_VEHICLES; i++) {
-            CentralAttractors cA= new CentralAttractors("hospital",chooseRandomCell());
+        for(int i = 0; i < NUM_CENTRAL_ATTRACTORS; i++) {
+            CentralAttractors cA= new CentralAttractors("centralAttractor",chooseRandomCell());
             centralAttractorsList.add(cA);
 
 
@@ -66,16 +89,7 @@ public class GridMap {
     }
 
 
-    public int getXLength(){
-        return this.grid.length;
-    }
-    public int getYLength(){
-        return this.grid[0].length;
-    }
 
-    public Cell getCell(int x,int y ) {
-       return grid[x][y];
-    }
 
     public boolean isCellOccupied(int x, int y) {
         return grid[x][y].isOccupied();
@@ -114,17 +128,4 @@ public class GridMap {
     }
 
 
-    public List<Vehicle> getVehicleList() {
-        return vehicleList;
-    }
-
-
-
-    public CounterUpdater getCounterUpdater() {
-        return counterUpdater;
-    }
-
-    public List<CentralAttractors> getCentralAttractorsList() {
-        return centralAttractorsList;
-    }
 }

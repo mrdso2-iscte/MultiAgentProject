@@ -6,11 +6,23 @@ import java.util.Random;
 public class Main {
     public static void main(String[] args) {
 
-        Double[] probabilities = {0.4, 0.2, 0.2,0.3}; // Adjust with actual probabilities
+        Double pInf = 0.4;
+        Double pRep = 0.2;
+        Double pBreak = 0.2;
+        Double pAtr = 0.2;
+        int NUM_NORMAL_VEHICLES = 10;
+        int NUM_INFECTED_VEHICLES = 5;
+        int NUM_CENTRAL_ATTRACTORS = 5;
+        int gridSizeX = 10;
+        int gridSizeY = 10;
 
 
 
-        GridMap map = new GridMap(10, 10, probabilities);
+        Double[] probabilities= {pInf,pRep,pBreak,pAtr};
+        int[] numberOfObjects = {NUM_NORMAL_VEHICLES, NUM_INFECTED_VEHICLES, NUM_CENTRAL_ATTRACTORS};
+
+
+        GridMap map = new GridMap(gridSizeX,gridSizeY, probabilities, numberOfObjects);
 
         SwingUtilities.invokeLater(() -> {
             VehicleSimulationGUI newGUI = new VehicleSimulationGUI(map);

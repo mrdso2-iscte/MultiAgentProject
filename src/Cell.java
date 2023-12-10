@@ -22,6 +22,7 @@ public class Cell {
 
 
     public boolean isOccupied() {
+
         return object != null;
     }
 

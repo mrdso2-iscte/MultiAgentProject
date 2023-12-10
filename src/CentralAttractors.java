@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class CentralAttractors {
 
     private String attractorType;
@@ -15,4 +17,7 @@ public class CentralAttractors {
     public String getAttractorType() {
         return attractorType;
     }
+
+
+
 }

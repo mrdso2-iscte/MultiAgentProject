@@ -125,19 +125,17 @@ public class VehicleSimulationGUI extends JFrame implements VehicleObserver{
 
     private void updateGrid(Cell previousPosition,Vehicle vehicle) {
 
-
-
-        JLabel cellLabel = (JLabel) gridPanel.getComponent(previousPosition.getX() * GRIDWIDTH + previousPosition.getY());
-
-        cellLabel.setIcon(null);
+        JLabel previousCellLabel = (JLabel) gridPanel.getComponent(previousPosition.getX() * GRIDWIDTH + previousPosition.getY());
+        previousCellLabel.setIcon(null);
 
         Cell currentPosition = vehicle.getCurrentPosition();
-        JLabel cellLabel1 = (JLabel) gridPanel.getComponent(currentPosition.getX() * GRIDWIDTH + currentPosition.getY());
-        cellLabel1.setIcon(getImageForState(currentPosition));
+        JLabel currentCellLabel = (JLabel) gridPanel.getComponent(currentPosition.getX() * GRIDWIDTH + currentPosition.getY());
 
-
+        currentCellLabel.setIcon(getImageForState(currentPosition));
         updateCounterLabels();
-        System.out.println(gridMap.counterUpdater.toString());
+
+
+
 
     }
     private void initializeCounterPanel() {
@@ -161,6 +159,8 @@ public class VehicleSimulationGUI extends JFrame implements VehicleObserver{
         counterPanel.add(new JLabel());
 
         add(counterPanel, BorderLayout.EAST); // Add the counter panel to the right side
+        updateCounterLabels();
+
     }
     private void updateCounterLabels() {
         notInfectedCountLabel.setText("Not Infected Count: " + gridMap.counterUpdater.getNotInfectedCount());
