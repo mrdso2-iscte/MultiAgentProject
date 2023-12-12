@@ -11,9 +11,9 @@ public class Main {
         Double pAtr = 0.1;
         Double epsilonINF = 0.3;
         Double epsilonREPandBREAK = 0.001;
-        int NUM_NORMAL_VEHICLES = 10;
+        int NUM_NORMAL_VEHICLES = 5;
         int NUM_INFECTED_VEHICLES = 5;
-        int NUM_CENTRAL_ATTRACTORS = 5;
+        int NUM_CENTRAL_ATTRACTORS = 3;
         int gridSizeX = 10;
         int gridSizeY = 10;
 

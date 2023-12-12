@@ -85,6 +85,7 @@ public class Vehicle implements Runnable {
         }
         if (gridMap.isValidCell(newX, newY) && !gridMap.isCellOccupied(newX, newY)) {
             changePosition(gridMap.getCell(newX, newY));
+
         }
 
     }
@@ -152,7 +153,8 @@ public class Vehicle implements Runnable {
     public synchronized void move() {
         Cell previousPosition = currentPosition;
         if (!state.equals(BROKEN)) {
-            if (goingToAttractor == null && !gridMap.getCentralAttractorsList().isEmpty()) {
+            if (goingToAttractor == null && gridMap.getCentralAttractorsList()!= null) {
+               
                 movedTowardAttractor();
             } else {
                 if (getDistanceToAttraction(currentPosition) == 1) {

@@ -124,14 +124,17 @@ public class VehicleSimulationGUI extends JFrame {
 
         JLabel previousCellLabel = (JLabel) gridPanel
                 .getComponent(previousPosition.getX() * GRIDWIDTH + previousPosition.getY());
-        previousCellLabel.setIcon(null);
-
+        previousCellLabel.setIcon(null); 
+       
         Cell currentPosition = vehicle.getCurrentPosition();
         JLabel currentCellLabel = (JLabel) gridPanel
                 .getComponent(currentPosition.getX() * GRIDWIDTH + currentPosition.getY());
 
         currentCellLabel.setIcon(getImageForState(currentPosition));
         updateCounterLabels();
+        
+        
+
     }
 
     private void initializeCounterPanel() {
