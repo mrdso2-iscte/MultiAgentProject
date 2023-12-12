@@ -73,15 +73,14 @@ public class GridMap {
            
         }
         for (int i = 0; i < NUM_NORMAL_VEHICLES; i++) {
-            Vehicle vehicle = new Vehicle(Vehicle.NOTINFECTED, chooseRandomCell(), probabilityMetrics, this, i);
+            Vehicle vehicle = new Vehicle(Vehicle.NOTINFECTED, chooseRandomCell(), probabilityMetrics, this);
             vehicleList.add(vehicle);
             counterUpdater.updateCounter(Vehicle.NOTINFECTED);
                     
 
         }
         for (int i = 0; i < NUM_INFECTED_VEHICLES; i++) {
-            Vehicle vehicle = new Vehicle(Vehicle.INFECTED, chooseRandomCell(), probabilityMetrics, this,
-                    i + NUM_NORMAL_VEHICLES);
+            Vehicle vehicle = new Vehicle(Vehicle.INFECTED, chooseRandomCell(), probabilityMetrics, this);
 
             vehicleList.add(vehicle);
             counterUpdater.updateCounter(Vehicle.INFECTED);

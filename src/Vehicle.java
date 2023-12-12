@@ -6,14 +6,12 @@ public class Vehicle implements Runnable {
     private Cell currentPosition;
     private static GridMap gridMap;
     private int reparationCount = 0;
-    private int id;
     private CentralAttractors goingToAttractor = null;
     public static double pINF, pREP, pBREAK, pATR, epsilonINF, epsilonREPandBREAK;
     public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
     public static final String NOTINFECTED = "NI", INFECTED = "I", REPAIRED = "R", BROKEN = "B";
 
-    public Vehicle(String initialState, Cell position, Double[] probabilityMetrics, GridMap gridMap, int id) {
-        this.id = id;
+    public Vehicle(String initialState, Cell position, Double[] probabilityMetrics, GridMap gridMap) {
         this.state = initialState;
         Vehicle.gridMap = gridMap;
         currentPosition = position;
@@ -33,7 +31,6 @@ public class Vehicle implements Runnable {
     private void setState(String newState) {
         String previousState = this.state;
         this.state = newState;
-       // System.out.println("Sou o carro " + id + " e mudei de estado de " + previousState + " para " + newState + " portanto os counters ficaram : " + Vehicle.gridMap.getCounterUpdater());
         Vehicle.gridMap.updateCounter(previousState, this.state);
     }
 
