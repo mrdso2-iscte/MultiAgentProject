@@ -32,9 +32,10 @@ public class VehicleSimulationGUI extends JFrame {
         this.GRIDHEIGHT = gridMap.getYLength();
         loadImages(); // Load images for different vehicle states
         initializeGUI();
+        initializeCounterPanel();
         initialCentralAttractors();
 
-        initializeCounterPanel();
+        
     }
 
     private void loadImages() {
@@ -74,7 +75,7 @@ public class VehicleSimulationGUI extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setSize(800, 600);
-        setVisible(true);
+        
     }
 
     private void initialCentralAttractors() {
@@ -88,8 +89,11 @@ public class VehicleSimulationGUI extends JFrame {
     }
 
     private ImageIcon getImageForState(Cell cell) {
+
         if (cell.isOccupied() && cell.getObject() instanceof Vehicle) {
+
             Vehicle vehicle = (Vehicle) cell.getObject();
+
             BufferedImage image;
             switch (vehicle.getState()) {
                 case Vehicle.NOTINFECTED:

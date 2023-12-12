@@ -16,7 +16,7 @@ public class GridMap {
     private VehicleSimulationGUI gui;
     private CounterUpdater counterUpdater;
 
-    public GridMap(int width, int height, Double[] probabilityMetrics, int[] numberOfObjects) {
+    public GridMap(int width, int height, Double[] probabilityMetrics, int[] numberOfObjects) throws InterruptedException {
         this.probabilityMetrics = probabilityMetrics;
         this.NUM_NORMAL_VEHICLES = numberOfObjects[0];
         this.NUM_INFECTED_VEHICLES = numberOfObjects[1];
@@ -59,7 +59,7 @@ public class GridMap {
         counterUpdater.updateCounter(previousState, newState);
     }
 
-    public void initializeGridVehiclesAndAttractors(int width, int height) {
+    public void initializeGridVehiclesAndAttractors(int width, int height) throws InterruptedException {
         this.grid = new Cell[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -70,12 +70,13 @@ public class GridMap {
         for (int i = 0; i < NUM_CENTRAL_ATTRACTORS; i++) {
             CentralAttractors cA = new CentralAttractors("centralAttractor", chooseRandomCell());
             centralAttractorsList.add(cA);
-
+           
         }
         for (int i = 0; i < NUM_NORMAL_VEHICLES; i++) {
             Vehicle vehicle = new Vehicle(Vehicle.NOTINFECTED, chooseRandomCell(), probabilityMetrics, this, i);
             vehicleList.add(vehicle);
             counterUpdater.updateCounter(Vehicle.NOTINFECTED);
+                    
 
         }
         for (int i = 0; i < NUM_INFECTED_VEHICLES; i++) {
@@ -84,12 +85,14 @@ public class GridMap {
 
             vehicleList.add(vehicle);
             counterUpdater.updateCounter(Vehicle.INFECTED);
+            
         }
         initializeGUI();
         startVehiclesThreads();
     }
 
-    public void startVehiclesThreads() {
+    public void startVehiclesThreads() throws InterruptedException {
+        Thread.sleep(5000);
 
         for (Vehicle vehicle : vehicleList) {
             Thread thread = new Thread(vehicle);
@@ -149,13 +152,19 @@ public class GridMap {
     }
 
     public Cell chooseRandomCell() {
+        
         Random rand = new Random();
         int x = rand.nextInt(getXLength());
         int y = rand.nextInt(getYLength());
-        if (isCellOccupied(x, y)) {
-            chooseRandomCell();
+        while(isCellOccupied(x, y)) {
+            rand = new Random();
+            x = rand.nextInt(getXLength());
+            y = rand.nextInt(getYLength());
         }
+        
+       
         return getCell(x, y);
     }
+
 
 }
