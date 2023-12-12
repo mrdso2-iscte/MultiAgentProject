@@ -16,7 +16,8 @@ public class CounterUpdater {
         decrementCounter(previousState);
         incrementCounter(newState);
     }
-    public void updateCounter( String newState) {
+
+    public void updateCounter(String newState) {
 
         incrementCounter(newState);
     }
@@ -52,13 +53,12 @@ public class CounterUpdater {
         return stateCounters.get(Vehicle.BROKEN);
     }
 
-    public String toString(){
+    public String toString() {
 
-        return "Grid updated: noInfect "+ stateCounters.get(Vehicle.NOTINFECTED) +
+        return "Grid updated: noInfect " + stateCounters.get(Vehicle.NOTINFECTED) +
                 " infect " + stateCounters.get(Vehicle.INFECTED) +
                 " repaired " + stateCounters.get(Vehicle.REPAIRED) +
-                " broken " + stateCounters.get(Vehicle.BROKEN) ;
+                " broken " + stateCounters.get(Vehicle.BROKEN);
     }
-
 
 }

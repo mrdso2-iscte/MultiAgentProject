@@ -6,36 +6,22 @@ import java.util.Random;
 public class Main {
     public static void main(String[] args) {
 
-        Double pInf = 0.4;
+        Double pInf = 0.5;
         Double pRep = 0.2;
-        Double pBreak = 0.2;
-        Double pAtr = 0.2;
+        Double pBreak = 0.1;
+        Double pAtr = 0.1;
+        Double epsilonINF = 0.3;
+        Double epsilonREPandBREAK = 0.001;
         int NUM_NORMAL_VEHICLES = 10;
         int NUM_INFECTED_VEHICLES = 5;
         int NUM_CENTRAL_ATTRACTORS = 5;
         int gridSizeX = 10;
         int gridSizeY = 10;
 
+        Double[] probabilities = { pInf, pRep, pBreak, pAtr, epsilonINF, epsilonREPandBREAK };
+        int[] numberOfObjects = { NUM_NORMAL_VEHICLES, NUM_INFECTED_VEHICLES, NUM_CENTRAL_ATTRACTORS };
 
-
-        Double[] probabilities= {pInf,pRep,pBreak,pAtr};
-        int[] numberOfObjects = {NUM_NORMAL_VEHICLES, NUM_INFECTED_VEHICLES, NUM_CENTRAL_ATTRACTORS};
-
-
-        new GridMap(gridSizeX,gridSizeY, probabilities, numberOfObjects);
-
-
-
-
-
-
-
-
-
-
-
-
-
+        new GridMap(gridSizeX, gridSizeY, probabilities, numberOfObjects);
 
     }
 }
